@@ -64,7 +64,8 @@ jobs:
     - name: Install dependencies
       run: |
         source $HOME/.cargo/env || true
-        uv sync --dev
+        uv venv
+        uv pip install -e ".[dev]"
 
     - name: Run migrations
       env:
