@@ -152,6 +152,7 @@ STATICFILES_DIRS = [
 ]
 
 # WhiteNoise configuration for serving static files
+# Use CompressedStaticFilesStorage for production
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 MEDIA_URL = "/media/"

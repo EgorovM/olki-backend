@@ -180,6 +180,7 @@
             font-size: 0.9em;
             line-height: 1.6;
             box-shadow: var(--shadow);
+            white-space: pre;
         }
 
         .feature-list {
@@ -621,26 +622,56 @@ docker compose up
 
             <section class="section">
                 <h2>Структура проекта</h2>
-                <div class="code-block">
-olki-backend/
-├── olki_backend/          # Основной проект Django
-│   ├── settings.py        # Настройки
-│   ├── urls.py            # URL маршруты
-│   └── views.py           # Views
-├── products/              # Приложение для продукции
-│   ├── models.py          # Модель Product
-│   ├── views.py           # API endpoints
-│   ├── serializers.py     # Сериализаторы
-│   └── tests.py           # Тесты
-├── contacts/              # Приложение для контактов
-│   ├── models.py          # Модель ContactRequest
-│   ├── views.py           # API endpoints
-│   ├── management/commands/runworker.py  # RabbitMQ консьюмер
-│   └── tests.py           # Тесты
-├── docker-compose.yml     # Docker Compose конфигурация
-├── Dockerfile             # Dockerfile для веб-сервера
-├── Dockerfile.worker      # Dockerfile для воркера
-└── pytest.ini            # Конфигурация pytest
+                <div class="code-block" style="font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', monospace; font-size: 0.85em; line-height: 1.8;">
+<strong style="color: #10b981;">olki-backend/</strong>
+├── <strong style="color: #3b82f6;">olki_backend/</strong>          <span style="color: #6b7280;"># Основной проект Django</span>
+│   ├── settings.py        <span style="color: #6b7280;"># Настройки</span>
+│   ├── urls.py            <span style="color: #6b7280;"># URL маршруты</span>
+│   ├── views.py           <span style="color: #6b7280;"># Views</span>
+│   ├── wsgi.py            <span style="color: #6b7280;"># WSGI конфигурация</span>
+│   └── asgi.py            <span style="color: #6b7280;"># ASGI конфигурация</span>
+│
+├── <strong style="color: #3b82f6;">products/</strong>              <span style="color: #6b7280;"># Приложение для продукции</span>
+│   ├── models.py          <span style="color: #6b7280;"># Модель Product</span>
+│   ├── views.py           <span style="color: #6b7280;"># API endpoints</span>
+│   ├── serializers.py     <span style="color: #6b7280;"># Сериализаторы</span>
+│   ├── urls.py            <span style="color: #6b7280;"># URL маршруты</span>
+│   ├── admin.py           <span style="color: #6b7280;"># Админ-панель</span>
+│   ├── migrations/        <span style="color: #6b7280;"># Миграции БД</span>
+│   └── tests.py           <span style="color: #6b7280;"># Тесты</span>
+│
+├── <strong style="color: #3b82f6;">contacts/</strong>              <span style="color: #6b7280;"># Приложение для контактов</span>
+│   ├── models.py          <span style="color: #6b7280;"># Модель ContactRequest</span>
+│   ├── views.py           <span style="color: #6b7280;"># API endpoints</span>
+│   ├── serializers.py     <span style="color: #6b7280;"># Сериализаторы</span>
+│   ├── urls.py            <span style="color: #6b7280;"># URL маршруты</span>
+│   ├── admin.py           <span style="color: #6b7280;"># Админ-панель</span>
+│   ├── migrations/        <span style="color: #6b7280;"># Миграции БД</span>
+│   ├── management/
+│   │   └── commands/
+│   │       └── runworker.py  <span style="color: #6b7280;"># RabbitMQ консьюмер</span>
+│   └── tests.py           <span style="color: #6b7280;"># Тесты</span>
+│
+├── <strong style="color: #3b82f6;">templates/</strong>            <span style="color: #6b7280;"># HTML шаблоны</span>
+│   └── report.html        <span style="color: #6b7280;"># Отчет для преподавателя</span>
+│
+├── <strong style="color: #3b82f6;">figures/</strong>              <span style="color: #6b7280;"># Изображения для отчета</span>
+│   └── *.png              <span style="color: #6b7280;"># Скриншоты</span>
+│
+├── <strong style="color: #3b82f6;">grafana/</strong>              <span style="color: #6b7280;"># Конфигурация Grafana</span>
+│   └── provisioning/      <span style="color: #6b7280;"># Дашборды и datasources</span>
+│
+├── <strong style="color: #3b82f6;">prometheus/</strong>           <span style="color: #6b7280;"># Конфигурация Prometheus</span>
+│   └── prometheus.yml     <span style="color: #6b7280;"># Настройки сбора метрик</span>
+│
+├── docker-compose.yml     <span style="color: #6b7280;"># Docker Compose конфигурация</span>
+├── Dockerfile             <span style="color: #6b7280;"># Dockerfile для веб-сервера</span>
+├── Dockerfile.worker      <span style="color: #6b7280;"># Dockerfile для воркера</span>
+├── pyproject.toml         <span style="color: #6b7280;"># Зависимости проекта</span>
+├── pytest.ini             <span style="color: #6b7280;"># Конфигурация pytest</span>
+├── Makefile               <span style="color: #6b7280;"># Команды для разработки</span>
+├── manage.py              <span style="color: #6b7280;"># Django management script</span>
+└── README.md              <span style="color: #6b7280;"># Документация</span>
                 </div>
             </section>
 
