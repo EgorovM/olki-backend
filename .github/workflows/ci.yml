@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: olki_db
+          POSTGRES_USER: olki_user
+          POSTGRES_PASSWORD: olki_password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      rabbitmq:
+        image: rabbitmq:3-management-alpine
+        env:
+          RABBITMQ_DEFAULT_USER: olki_user
+          RABBITMQ_DEFAULT_PASS: olki_password
+        options: >-
+          --health-cmd "rabbitmq-diagnostics ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5672:5672
+
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install uv
+      run: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+    - name: Install dependencies
+      run: |
+        uv pip install -e ".[dev]"
+
+    - name: Run migrations
+      env:
+        DATABASE_URL: postgresql://olki_user:olki_password@localhost:5432/olki_db
+        RABBITMQ_URL: amqp://olki_user:olki_password@localhost:5672/
+        REDIS_URL: redis://localhost:6379/0
+        DJANGO_SETTINGS_MODULE: olki_backend.settings
+      run: |
+        python manage.py migrate
+
+    - name: Run tests with coverage
+      env:
+        DATABASE_URL: postgresql://olki_user:olki_password@localhost:5432/olki_db
+        RABBITMQ_URL: amqp://olki_user:olki_password@localhost:5672/
+        REDIS_URL: redis://localhost:6379/0
+        DJANGO_SETTINGS_MODULE: olki_backend.settings
+      run: |
+        pytest --cov=. --cov-report=term-missing --cov-report=xml --cov-report=html --cov-fail-under=90
+
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
