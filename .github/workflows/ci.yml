@@ -63,7 +63,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        uv pip install -e ".[dev]"
+        uv sync --dev
 
     - name: Run migrations
       env:
@@ -72,7 +72,7 @@ jobs:
         REDIS_URL: redis://localhost:6379/0
         DJANGO_SETTINGS_MODULE: olki_backend.settings
       run: |
-        python manage.py migrate
+        uv run python manage.py migrate
 
     - name: Run tests with coverage
       env:
@@ -81,7 +81,7 @@ jobs:
         REDIS_URL: redis://localhost:6379/0
         DJANGO_SETTINGS_MODULE: olki_backend.settings
       run: |
-        pytest --cov=. --cov-report=term-missing --cov-report=xml --cov-report=html --cov-fail-under=90
+        uv run pytest --cov=. --cov-report=term-missing --cov-report=xml --cov-report=html --cov-fail-under=90
 
     - name: Upload coverage reports
       uses: codecov/codecov-action@v3
