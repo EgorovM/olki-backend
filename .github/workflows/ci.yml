@@ -63,6 +63,7 @@ jobs:
 
     - name: Install dependencies
       run: |
+        source $HOME/.cargo/env || true
         uv sync --dev
 
     - name: Run migrations
@@ -73,7 +74,9 @@ jobs:
         REDIS_URL: redis://localhost:6379/0
         DJANGO_SETTINGS_MODULE: olki_backend.settings
       run: |
-        uv run python manage.py migrate
+        source $HOME/.cargo/env || true
+        source .venv/bin/activate
+        python manage.py migrate
 
     - name: Run tests with coverage
       env:
@@ -83,7 +86,9 @@ jobs:
         REDIS_URL: redis://localhost:6379/0
         DJANGO_SETTINGS_MODULE: olki_backend.settings
       run: |
-        uv run pytest --cov=. --cov-report=term-missing --cov-report=xml --cov-report=html --cov-fail-under=90
+        source $HOME/.cargo/env || true
+        source .venv/bin/activate
+        pytest --cov=. --cov-report=term-missing --cov-report=xml --cov-report=html --cov-fail-under=90
 
     - name: Upload coverage reports
       uses: codecov/codecov-action@v3
